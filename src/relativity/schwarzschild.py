@@ -24,6 +24,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 from scipy.integrate import solve_ivp
+from scipy.optimize import brentq
 
 from ..config import G, C
 
@@ -137,53 +138,144 @@ def simulate_orbit_schwarzschild(
 # ---------------------------------------------------------------------------
 # Géodésique nulle (photon) — pour la déviation de la lumière
 # ---------------------------------------------------------------------------
+def critical_impact_parameter(mass: float) -> float:
+    """Paramètre d'impact critique : b_crit = (3√3/2)·rs ≈ 2.598·rs.
+
+    Pour b < b_crit, le photon est capturé par le trou noir (plonge sous
+    l'horizon). Pour b > b_crit, il s'échappe avec une déviation finie.
+    Au seuil exact b = b_crit, il orbite indéfiniment à r = 1.5·rs
+    (photon sphère).
+    """
+    return 1.5 * np.sqrt(3.0) * schwarzschild_radius(mass)
+
+
+def _periapse_from_impact(mass: float, b: float) -> float:
+    """Rayon de plus proche approche r_min en fonction du paramètre d'impact b.
+
+    Relation : b² = r_min² / (1 - rs/r_min)  ⇔  r_min³ - b²·r_min + b²·rs = 0.
+    On prend la plus grande racine réelle > 1.5·rs (trajectoire évadée).
+    """
+    rs = schwarzschild_radius(mass)
+    b_crit = critical_impact_parameter(mass)
+    if b <= b_crit:
+        raise ValueError(
+            f"b = {b/rs:.3f}·rs ≤ b_crit = {b_crit/rs:.3f}·rs : photon capturé."
+        )
+    # Cherche r_min dans [1.5·rs, b] (la plus grande racine y est)
+    f = lambda r: r**3 - b * b * r + b * b * rs
+    return brentq(f, 1.5 * rs, b)
+
+
 def simulate_photon_schwarzschild(
     M_central: float,
-    r_min: float,
-    phi_max: float = np.pi,
+    b: float,
+    phi_max: float = 4.0 * np.pi,
     n_points: int = 5000,
     rtol: float = 1e-11,
-    atol: float = 1e-13,
+    atol: float = 1e-14,
 ) -> GeodesicResult:
-    """Trajectoire d'un photon dans Schwarzschild.
+    """Trajectoire d'un photon dans Schwarzschild (plan équatorial).
 
-    Le photon est tangent au cercle r = r_min à φ = 0, on intègre des deux
-    côtés. Pour b grand devant rs, l'angle de déviation théorique est
-    α ≈ 4GM/(b·c²) (mesuré en 1919, ~1.75" pour b = R_sun).
+    Paramètres
+    ----------
+    M_central : masse de la lentille (kg)
+    b         : paramètre d'impact asymptotique (m). Doit être > b_crit pour
+                que le photon ne soit pas capturé.
+    phi_max   : étendue angulaire maximale d'intégration de chaque côté (rad).
+
+    Le photon est paramétré par son rayon de plus proche approche r_min(b)
+    et a son périapse à φ = 0. On intègre l'équation de Binet pour photons
+    des deux côtés (avec event detection à u = 0 pour stopper à l'infini).
+
+    En faible champ (b ≫ rs) : α ≈ 4GM/(bc²). Près de b_crit, α diverge
+    logarithmiquement.
     """
-    mu = G * M_central
-    rs_coef = 3.0 * mu / C**2
+    r_min = _periapse_from_impact(M_central, b)
+    B = 3.0 * G * M_central / (C**2 * r_min)
 
     def rhs(_phi, state):
-        u, du = state
-        d2u = rs_coef * u**2 - u
-        return [du, d2u]
+        U, dU = state
+        return [dU, B * U * U - U]
 
-    state0 = [1.0 / r_min, 0.0]
+    def at_infinity(_phi, state):
+        return state[0]
+    at_infinity.terminal = True
+    at_infinity.direction = -1
+
+    state0 = [1.0, 0.0]    # U = u·r_min = 1 au périapse
 
     sol_fwd = solve_ivp(
         rhs, (0.0, phi_max), state0,
         t_eval=np.linspace(0.0, phi_max, n_points),
         method="DOP853", rtol=rtol, atol=atol,
+        events=at_infinity,
     )
     sol_bwd = solve_ivp(
         rhs, (0.0, -phi_max), state0,
         t_eval=np.linspace(0.0, -phi_max, n_points),
         method="DOP853", rtol=rtol, atol=atol,
+        events=at_infinity,
     )
 
     phi = np.concatenate([sol_bwd.t[::-1], sol_fwd.t[1:]])
-    u = np.concatenate([sol_bwd.y[0][::-1], sol_fwd.y[0][1:]])
-    valid = u > 0
-    phi, u = phi[valid], u[valid]
-    r = 1.0 / u
+    U = np.concatenate([sol_bwd.y[0][::-1], sol_fwd.y[0][1:]])
+    valid = U > 0
+    phi, U = phi[valid], U[valid]
+    r = r_min / U
     x = r * np.cos(phi)
     y = r * np.sin(phi)
     return GeodesicResult(phi=phi, r=r, x=x, y=y)
 
 
+def measure_deflection_angle(
+    M_central: float,
+    b: float,
+    phi_max: float = 4.0 * np.pi,
+    rtol: float = 1e-12,
+    atol: float = 1e-15,
+) -> float:
+    """Angle de déviation α d'un photon (rad), mesuré avec event detection.
+
+    α = (φ⁺ − φ⁻) − π où φ⁺ et φ⁻ sont les angles asymptotiques (u → 0).
+    Lève ValueError si b ≤ b_crit (photon capturé).
+    """
+    r_min = _periapse_from_impact(M_central, b)
+    B = 3.0 * G * M_central / (C**2 * r_min)
+
+    def rhs(_phi, state):
+        U, dU = state
+        return [dU, B * U * U - U]
+
+    def at_infinity(_phi, state):
+        return state[0]
+    at_infinity.terminal = True
+    at_infinity.direction = -1
+
+    state0 = [1.0, 0.0]
+
+    sol_fwd = solve_ivp(
+        rhs, (0.0, phi_max), state0,
+        method="DOP853", rtol=rtol, atol=atol,
+        events=at_infinity,
+    )
+    sol_bwd = solve_ivp(
+        rhs, (0.0, -phi_max), state0,
+        method="DOP853", rtol=rtol, atol=atol,
+        events=at_infinity,
+    )
+
+    if len(sol_fwd.t_events[0]) == 0 or len(sol_bwd.t_events[0]) == 0:
+        raise RuntimeError(
+            "L'intégrateur n'a pas atteint u=0 dans la fenêtre angulaire — augmenter phi_max."
+        )
+
+    phi_plus = sol_fwd.t_events[0][0]
+    phi_minus = sol_bwd.t_events[0][0]
+    return float((phi_plus - phi_minus) - np.pi)
+
+
 def light_deflection_angle(M_central: float, b: float) -> float:
-    """Angle de déviation théorique GR pour un photon : α = 4GM/(b·c²) (rad).
+    """Angle de déviation théorique GR (faible champ) : α = 4GM/(b·c²) (rad).
 
     Newton prédirait la moitié (2GM/bc²). Pour le Soleil et b = R_sun, on
     obtient α ≈ 1.75'' (mesuré lors de l'éclipse de 1919).

@@ -48,10 +48,13 @@ Quatre scénarios, du plus faible au plus fort régime relativiste :
 - `ipywidgets` pour ajuster les paramètres (masse, distance, vitesse) à la volée.
 - Plots `matplotlib` (trajectoires 2D, énergie/moment cinétique, écart Newton-GR).
 
-**Phase 2 — Application Pygame** (à venir)
-- Visualisation interactive temps réel.
-- Contrôles : zoom, vitesse de simulation, switch Newton/GR.
-- Cible : explorer librement les 4 scénarios visuellement.
+**Phase 2 — Application Pygame** (en place pour le scénario orbital)
+- `src/visualization/pygame_app.py` : visualisation temps réel, switch Newton/GR (`N`/`G`/`B`).
+- Contrôles : masse (`↑↓`), périapse (`←→`), excentricité (`E`/`W`), vitesse (`+`/`-`).
+- À l'état actuel : un seul scénario (orbite autour d'une masse centrale). Les cas
+  *déviation de la lumière* et *N-corps système solaire* n'y sont pas (ils restent
+  dans les notebooks 03 et 04). Une éventuelle sandbox plus large viendra plus tard
+  si besoin.
 
 ---
 
