@@ -14,7 +14,6 @@
   <img src="assets/hero.gif" alt="Newton vs General Relativity orbital comparison" width="600">
 </p>
 
----
 
 ## 📝 Project Description
 
