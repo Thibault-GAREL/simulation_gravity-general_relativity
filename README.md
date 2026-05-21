@@ -11,7 +11,7 @@
 ![Contributions](https://img.shields.io/badge/contributions-welcome-orange.svg)
 
 <p align="center">
-  <img src="assets/hero.gif" alt="Newton vs General Relativity orbital comparison" width="600">
+  <img src="assets/hero.gif" alt="Newton vs General Relativity orbital comparison" width="700">
 </p>
 
 
@@ -43,66 +43,201 @@ This project was built **to actually understand** the differences — not just r
 
 ---
 
-## Example Outputs
-
-### Mercury's perihelion precession (notebook 01)
-
-The historical test of General Relativity. With central mass amplified to make the effect visible to the eye, the Newtonian orbit stays a closed ellipse while the GR orbit traces a **rosette** that slowly rotates:
+## Outputs
 
 <p align="center">
-  <img src="assets/mercury_precession.png" alt="Mercury precession amplified" width="500">
+  <img src="assets/01_mercury_pression_0.png" width="800">
 </p>
-
-```
-Newton (sim)    : ~0 arcsec/century  (closed ellipse)
-GR     (sim)    : +42.998 arcsec/century
-GR     (theory) : +42.997 arcsec/century
-Observed        : ~43.00 arcsec/century  ✅
-```
-
-### Orbit near a black hole (notebook 02)
-
-With a periapse at 4 rs, Newton predicts a perfectly stable ellipse — General Relativity says the orbit **plunges below the horizon**:
 
 <p align="center">
-  <img src="assets/bh_plunge.png" alt="Stable orbit (Newton) vs plunge (GR)" width="500">
+  <img src="assets/01_mercury_pression_1.png" width="800">
 </p>
-
-### Light deflection by a black hole (notebook 03)
-
-A photon passing close to a compact object is dramatically deflected. Below `b ≈ 2.6 rs`, it is **captured**:
 
 <p align="center">
-  <img src="assets/light_deflection.png" alt="Photon trajectories at different impact parameters" width="700">
+  <img src="assets/01_mercury_pression_2_1.png" width="800">
 </p>
-
-The full **Newton vs GR weak-field vs exact simulation** diagram shows where the simple formula `α = 4GM/(bc²)` breaks down:
 
 <p align="center">
-  <img src="assets/deflection_diagram.png" alt="Deflection angle vs impact parameter" width="600">
+  <img src="assets/01_mercury_pression_2_2.png" width="800">
 </p>
-
-### Full solar system N-body (notebook 04)
-
-Inner and outer planets, integrated for 50 years. Total energy conserved to 10⁻⁹:
 
 <p align="center">
-  <img src="assets/solar_system.png" alt="N-body solar system" width="700">
+  <img src="assets/01_mercury_pression_3.png" width="800">
 </p>
-
-### Interactive Pygame app
-
-Switch Newton/GR in real time and dial the central mass, periapse and eccentricity from the keyboard:
 
 <p align="center">
-  <img src="assets/pygame_screenshot.png" alt="Pygame interactive comparison" width="700">
+  <img src="assets/01_mercury_pression_4_1.png" width="800">
 </p>
 
-### 📝 Notes & Observations
+<p align="center">
+  <img src="assets/01_mercury_pression_4_2.png" width="800">
+</p>
 
-- **Mercury's 43"/century** is roughly **8%** of the total observed perihelion shift (~574"/century). The other ~531" come from Newtonian perturbations by Venus, Earth and Jupiter — Le Verrier had already computed this in 1859 and the residual is what bothered him.
-- **The factor 2** between Newton (corpuscular) and GR for light deflection is not a coincidence: half comes from time dilation (Newton can in principle predict this), half from spatial curvature (uniquely GR).
-- The **ISCO at 3 rs** has no Newtonian analogue. In Newton, any circular orbit is stable. In GR, the effective potential barrier collapses inside 3 rs.
+<p align="center">
+  <img src="assets/01_mercury_pression_5_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/01_mercury_pression_5_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/01_mercury_pression_Bilan.png" width="800">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_0.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_1_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_1_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_2_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_2_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_2_3.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_3_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_3_2.gif" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_4_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_4_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/02_black_hole_orbit_Bilan.png" width="800">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/03_light_deflection_0.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_2_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_2_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_3_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_3_2.png" width="800">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/03_light_deflection_4_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_4_2.gif" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/03_light_deflection_Bilan.png" width="800">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/04_solar_system_0.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_2_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_2_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_3_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_3_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_4_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_4_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_5_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_5_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_6_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_6_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_7_1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_7_2.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets/04_solar_system_Bilan.png" width="800">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/Full_orbit_mandala.png" width="700">
+</p>
 
 ---
 
@@ -198,6 +333,8 @@ python run_pygame.py
 ## 📖 Inspiration / Sources
 
 I built this project to actually understand what changes between Newton and Einstein when you point a numerical solver at the same problem 😆 !
+
+I read 2 **books** about Newton and Einstein, and that's what motivated me to translate what I read into a Python simulation.
 
 I used Claude AI for sanity-checking the Binet-Einstein derivation and helping with the non-dimensionalization that made Mercury's precession numerically tractable.
 
