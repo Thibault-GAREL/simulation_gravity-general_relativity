@@ -334,7 +334,7 @@ python run_pygame.py
 
 I built this project to actually understand what changes between Newton and Einstein when you point a numerical solver at the same problem 😆 !
 
-I read 2 **books** about Newton and Einstein, and that's what motivated me to translate what I read into a Python simulation.
+I read 2 [**books**](https://boutique.rbafrance.fr/collections/grandes-idees-de-la-science) about Newton and Einstein, and that's what motivated me to translate what I read into a Python simulation.
 
 I used Claude AI for sanity-checking the Binet-Einstein derivation and helping with the non-dimensionalization that made Mercury's precession numerically tractable.
 
