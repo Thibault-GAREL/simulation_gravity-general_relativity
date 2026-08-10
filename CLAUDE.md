@@ -82,8 +82,8 @@ simulation_gravity-general_relativity/
 
 ## Environnement
 
-- **venv** : `pytorch_cuda_env` (il contient déjà `jupyter`, `ipywidgets`, `scipy`, `matplotlib`, `pygame`).
-- Activation : `& c:\0-Code_py_temp\pytorch_cuda_env\Scripts\Activate.ps1`
+- **venv** : `pytorch_py310` (il contient déjà `jupyter`, `ipywidgets`, `scipy`, `matplotlib`, `pygame`).
+- Activation : `& c:\0-Code_py_temp\pytorch_py310\Scripts\Activate.ps1`
 - Pas besoin de PyTorch/CUDA pour ce projet (calcul purement numérique CPU).
 
 ---

@@ -2,7 +2,7 @@
 
 Usage (depuis la racine du projet, avec le venv activé) :
 
-    & c:\\0-Code_py_temp\\pytorch_cuda_env\\Scripts\\Activate.ps1
+    & c:\\0-Code_py_temp\\pytorch_py310\\Scripts\\Activate.ps1
     python run_pygame.py
 """
 
