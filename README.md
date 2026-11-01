@@ -23,23 +23,18 @@ The project covers the four most pedagogical cases: **Mercury's perihelion prece
 
 This project was built **to actually understand** the differences — not just read about them. Each notebook validates the simulation against an analytical formula or a real observation (43"/century for Mercury, 1.75" for light bending, etc.).
 
----
+<details>
+<summary>⚙️ <b>Feature list</b></summary>
 
-## ⚙️ Features
+- **Newton 2-body & N-body integrator** (`scipy.integrate.solve_ivp` with DOP853, event detection for periapses)
+- **Schwarzschild geodesics** via the **Binet-Einstein equation** in `u = 1/r` form, non-dimensionalized for numerical stability
+- **Photon trajectories** with exact treatment of the impact parameter `b`, capture detection at `b < (3√3/2)·rs`
+- **Four Jupyter notebooks** with theory, code, plots and interactive `ipywidgets` sliders
+- **Pygame app** to switch Newton ↔ GR in real time with keyboard controls
+- **Quantitatively validated**: Mercury precession measured at 42.998"/century vs 42.997" theory (0.002% error)
+- **SI units everywhere**: real planetary masses, real distances, real `c` and `G`, no toy normalizations
 
-  🪐 **Newton 2-body & N-body integrator** (`scipy.integrate.solve_ivp` with DOP853, event detection for periapses)
-
-  ⚫ **Schwarzschild geodesics** via the **Binet-Einstein equation** in `u = 1/r` form, non-dimensionalized for numerical stability
-
-  💡 **Photon trajectories** with exact treatment of the impact parameter `b`, capture detection at `b < (3√3/2)·rs`
-
-  📓 **Four Jupyter notebooks** with theory, code, plots and interactive `ipywidgets` sliders
-
-  🎮 **Pygame app** to switch Newton ↔ GR in real time with keyboard controls
-
-  ✅ **Quantitatively validated**: Mercury precession measured at 42.998"/century vs 42.997" theory (0.002% error)
-
-  📚 **SI units everywhere** — real planetary masses, real distances, real `c` and `G` — no toy normalizations
+</details>
 
 ---
 
@@ -241,21 +236,16 @@ This project was built **to actually understand** the differences — not just r
 
 ---
 
-## ⚙️ How it works
+## 🗺️ How it works
 
-  🧮 **Newton** integrates `d²r/dt² = -GM·r̂/r²` directly with high-order Runge-Kutta (DOP853). The 2-body and N-body solvers detect periapse passages via SciPy's event detection (`dr/dt = 0` with rising direction) for machine-precision precession measurements.
-
-  🌀 **General Relativity** uses the **Binet-Einstein equation** for the spatial trajectory `u(φ) = 1/r`:
+- **Newton** integrates `d²r/dt² = -GM·r̂/r²` directly with high-order Runge-Kutta (DOP853). The 2-body and N-body solvers detect periapse passages via SciPy's event detection (`dr/dt = 0` with rising direction) for machine-precision precession measurements.
+- **General Relativity** uses the **Binet-Einstein equation** for the spatial trajectory `u(φ) = 1/r`:
   - Massive particles: `d²u/dφ² + u = GM/h² + (3GM/c²)·u²`
   - Photons: `d²u/dφ² + u = (3GM/c²)·u²`
-
   The `(3GM/c²)·u²` term **is** the pure relativistic correction. As `c → ∞` we recover Kepler.
-
-  🔢 **Non-dimensionalization**: integrating with `U = u·r₀` (initial condition `U(0) = 1`) keeps everything around unit scale, which is critical — for Mercury the natural `u ≈ 2×10⁻¹¹` is too close to numerical tolerances.
-
-  🎯 **Photon impact parameter**: the app takes the asymptotic `b` (standard), converts it internally to the closest approach `r_min` via the cubic `r_min³ - b²·r_min + b²·rs = 0`, and raises if `b < b_crit = (3√3/2)·rs` (photon captured).
-
-  📊 **Validation**: each scenario is checked against an analytical formula (`6πGM/(c²·a(1-e²))` for Mercury, `4GM/(bc²)` for light, total energy conservation for N-body) or against a known observation.
+- **Non-dimensionalization**: integrating with `U = u·r₀` (initial condition `U(0) = 1`) keeps everything around unit scale, which is critical, for Mercury the natural `u ≈ 2×10⁻¹¹` is too close to numerical tolerances.
+- **Photon impact parameter**: the app takes the asymptotic `b` (standard), converts it internally to the closest approach `r_min` via the cubic `r_min³ - b²·r_min + b²·rs = 0`, and raises if `b < b_crit = (3√3/2)·rs` (photon captured).
+- **Validation**: each scenario is checked against an analytical formula (`6πGM/(c²·a(1-e²))` for Mercury, `4GM/(bc²)` for light, total energy conservation for N-body) or against a known observation.
 
 ---
 
